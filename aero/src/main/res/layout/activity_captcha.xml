@@ -1,34 +1,41 @@
-<LinearLayout
-    android:orientation="vertical"
+<RelativeLayout
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:weightSum="1">
+    >
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ks.aero2captcha.image.TouchImageView
         android:id="@+id/captchaImage"
-        android:layout_gravity="center_horizontal" />
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentTop="true"/>
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/captchaText"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
+    <LinearLayout android:id="@+id/buttons"
+        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/captcha_button"
-        android:id="@+id/captchaButton"
-        android:layout_gravity="center_horizontal" />
+        android:layout_alignParentBottom="true">
 
-    <ProgressBar
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/captchaProgress"
-        android:layout_gravity="center_horizontal"
-        android:visibility="gone" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/captchaText"
+            android:layout_gravity="center_horizontal" />
 
-</LinearLayout>
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/captcha_button"
+            android:id="@+id/captchaButton"
+            android:layout_gravity="center_horizontal" />
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/captchaProgress"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</RelativeLayout>
