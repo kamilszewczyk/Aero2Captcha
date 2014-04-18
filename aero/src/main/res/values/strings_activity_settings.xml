@@ -1,0 +1,56 @@
+<resources>
+        <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_restart_delay">Restart 3G network delay</string>
+    <string name="pref_summary_restart_delay">If restarting 3G netowrk is not working, try setting bigger value</string>
+    <string-array name="pref_restart_delay_titles">
+        <item>2 seconds</item>
+        <item>3 seconds</item>
+        <item>4 seconds</item>
+        <item>5 seconds</item>
+        <item>10 seconds</item>
+    </string-array>
+    <string-array name="pref_restart_delay_values">
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>10</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Sync settings</string>
+
+    <string name="pref_title_sync_frequency">Frequency of Aero2 Captcha check</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>10 seconds</item>
+        <item>15 seconds</item>
+        <item>30 seconds</item>
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>5 minutes</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>300</item>
+    </string-array>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+</resources>

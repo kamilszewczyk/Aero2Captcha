@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Aero2 Captcha</string>
+    <string name="captcha_button">Wyślij</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="action_refresh">Odśwież</string>
+
+    <string name="captcha_required">Wymagane wpisanie captchy.</string>
+
+    <string name="error_no_mobile">Brak aktywnego połączenia 3G.</string>
+    <string name="error_download">Wystąpił problem pobierania danych. Spróbuj ponownie.</string>
+    <string name="error_submit">Podałeś złą odpowiedź. Spróbuj ponownie.</string>
+
+    <string name="success">Odpowiedź zaakceptowana. Poczekaj aż połączenie internetowe zostanie zrestartowane.</string>
+</resources>

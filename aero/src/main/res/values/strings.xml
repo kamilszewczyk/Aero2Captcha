@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Aero2 Captcha</string>
+    <string name="captcha_button">Submit</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_refresh">Refresh</string>
+
+    <string name="captcha_required">New captcha required.</string>
+
+    <string name="error_no_mobile">There is no 3G connection active.</string>
+    <string name="error_download">There were problems with downloading data. Please try again.</string>
+    <string name="error_submit">Wrong answer to captcha. Please try again.</string>
+
+    <string name="success">Captcha accepted. Please wait for connection restart.</string>
+</resources>

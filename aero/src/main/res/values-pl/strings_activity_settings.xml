@@ -1,0 +1,42 @@
+<resources>
+    <string name="title_activity_settings">Ustawienia</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">Główne</string>
+
+    <string name="pref_title_restart_delay">Opóźnienie restartu połączenia 3G</string>
+    <string name="pref_summary_restart_delay">Jeżeli restartowanie połączenia nie działą spróbuj ustawić dłuższy czas</string>
+    <string-array name="pref_restart_delay_titles">
+        <item>2 sekundy</item>
+        <item>3 sekundy</item>
+        <item>4 sekundy</item>
+        <item>5 sekundy</item>
+        <item>10 sekund</item>
+    </string-array>
+
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Ustawienia synchronizacji</string>
+
+    <string name="pref_title_sync_frequency">Częstotliwość sprawdzania captchy</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>10 sekund</item>
+        <item>15 sekund</item>
+        <item>30 sekund</item>
+        <item>1 minuta</item>
+        <item>2 minuty</item>
+        <item>5 minut</item>
+    </string-array>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Powiadomienia</string>
+
+    <string name="pref_title_new_message_notifications">Powiadamiaj o nowej Captchy</string>
+
+    <string name="pref_title_ringtone">Dzwonek</string>
+    <string name="pref_ringtone_silent">Wyciszony</string>
+
+    <string name="pref_title_vibrate">Wibracja</string>
+</resources>
