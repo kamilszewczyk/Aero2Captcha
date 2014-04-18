@@ -12,5 +12,6 @@
     <string name="error_download">There were problems with downloading data. Please try again.</string>
     <string name="error_submit">Wrong answer to captcha. Please try again.</string>
 
+    <string name="connection_active">Connection is currently active.</string>
     <string name="success">Captcha accepted. Please wait for connection restart.</string>
 </resources>

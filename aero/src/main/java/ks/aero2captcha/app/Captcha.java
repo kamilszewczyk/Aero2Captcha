@@ -20,6 +20,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.concurrent.ExecutionException;
+
 import ks.aero2captcha.alarm.CaptchaService;
 import ks.aero2captcha.image.TouchImageView;
 import ks.aero2captcha.network.Aero;
@@ -64,13 +66,34 @@ public class Captcha extends ActionBarActivity {
     protected void downloadCaptcha() {
         if (!State.isConnectedMobile(getApplicationContext())) {
             Toast.makeText(getApplicationContext(), R.string.error_no_mobile, Toast.LENGTH_LONG).show();
-            submit.setEnabled(false);
 
             return;
         }
 
         submit.setVisibility(View.GONE);
         progress.setVisibility(View.VISIBLE);
+
+        //show active connection text instead of captcha when no captcha is needed
+        try {
+            Boolean captchaRequired = new Aero().execute(getApplicationContext()).get();
+            Log.d(TAG, String.valueOf(captchaRequired));
+            if (!captchaRequired) {
+                TouchImageView image = (TouchImageView) findViewById(R.id.captchaImage);
+                TextView text = (TextView) findViewById(R.id.activeConnection);
+                image.setVisibility(View.GONE);
+                text.setVisibility(View.VISIBLE);
+
+                submit.setEnabled(false);
+                progress.setVisibility(View.GONE);
+                submit.setVisibility(View.VISIBLE);
+                return;
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
         BaseAsyncTask mAsyncTask = new BaseAsyncTask();
         mAsyncTask.setUrl(RECAPTCHA_SERVER + "challenge?k=" + AERO_PUBLIC_KEY);
         mAsyncTask.setCallbackListener(callbackListener);
@@ -139,8 +162,11 @@ public class Captcha extends ActionBarActivity {
             }
             else if(rs.code == TaskResult.CODE_SUCCESS) {
                 TouchImageView image = (TouchImageView) findViewById(R.id.captchaImage);
+                TextView text = (TextView) findViewById(R.id.activeConnection);
                 image.setMinZoom(0.1f);
                 image.setImageBitmap((Bitmap) rs.getResultData());
+                image.setVisibility(View.VISIBLE);
+                text.setVisibility(View.GONE);
 
                 submit.setEnabled(true);
                 submit.setVisibility(View.VISIBLE);

@@ -1,5 +1,6 @@
 package ks.aero2captcha.network;
 
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +11,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+import android.view.View;
+import android.widget.TextView;
 
 import org.apache.http.HttpResponse;
 
@@ -17,16 +20,17 @@ import java.io.IOException;
 
 import ks.aero2captcha.app.Captcha;
 import ks.aero2captcha.app.R;
+import ks.aero2captcha.image.TouchImageView;
 
-public class Aero extends AsyncTask<Context, Void, Void> {
+public class Aero extends AsyncTask<Context, Void, Boolean> {
 
     public static final int NOTIFICATION_ID = 872987;
 
     @Override
-    protected Void doInBackground(Context... contexts) {
+    protected Boolean doInBackground(Context... contexts) {
+        Context context = contexts[0];
 
         if (isCaptchaRequired()) {
-            Context context = contexts[0];
             Intent mIntent = new Intent(context, Captcha.class);
             PendingIntent pIntent = PendingIntent.getActivity(context, 0, mIntent, 0);
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -49,9 +53,11 @@ public class Aero extends AsyncTask<Context, Void, Void> {
                     (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
             notificationManager.notify(NOTIFICATION_ID, note);
+        } else {
+            return false;
         }
 
-        return null;
+        return true;
     }
 
     public static boolean isCaptchaRequired() {

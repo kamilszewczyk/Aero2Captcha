@@ -12,5 +12,6 @@
     <string name="error_download">Wystąpił problem pobierania danych. Spróbuj ponownie.</string>
     <string name="error_submit">Podałeś złą odpowiedź. Spróbuj ponownie.</string>
 
+    <string name="connection_active">Połączenie z internetem jest aktywne.</string>
     <string name="success">Odpowiedź zaakceptowana. Poczekaj aż połączenie internetowe zostanie zrestartowane.</string>
 </resources>
