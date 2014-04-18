@@ -1,5 +1,6 @@
 package ks.aero2captcha.app;
 
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 
 import ks.aero2captcha.alarm.CaptchaService;
 import ks.aero2captcha.image.TouchImageView;
+import ks.aero2captcha.network.Aero;
 import ks.aero2captcha.network.BaseAsyncTask;
 import ks.aero2captcha.network.ConnectionManager;
 import ks.aero2captcha.network.State;
@@ -159,7 +161,13 @@ public class Captcha extends ActionBarActivity {
                 downloadCaptcha();
             }
             else if(rs.code == TaskResult.CODE_SUCCESS) {
+                //remove notification
+                NotificationManager notificationManager =
+                        (NotificationManager) getApplicationContext().getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
+                notificationManager.cancel(Aero.NOTIFICATION_ID);
+                //show toast
                 Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_LONG).show();
+                //restart connection
                 State.turnOnDataConnection(false, getApplicationContext());
                 int restartDelay = Integer.parseInt(sharedPref.getString("restart_delay", "2"));
                 new Handler().postDelayed(new Runnable() {

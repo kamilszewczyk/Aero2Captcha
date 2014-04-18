@@ -20,6 +20,8 @@ import ks.aero2captcha.app.R;
 
 public class Aero extends AsyncTask<Context, Void, Void> {
 
+    public static final int NOTIFICATION_ID = 872987;
+
     @Override
     protected Void doInBackground(Context... contexts) {
 
@@ -46,7 +48,7 @@ public class Aero extends AsyncTask<Context, Void, Void> {
             NotificationManager notificationManager =
                     (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
 
-            notificationManager.notify(0, note);
+            notificationManager.notify(NOTIFICATION_ID, note);
         }
 
         return null;
