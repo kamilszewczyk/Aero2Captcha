@@ -9,9 +9,11 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -170,8 +172,10 @@ public class Captcha extends ActionBarActivity {
 
                 submit.setEnabled(true);
                 submit.setVisibility(View.VISIBLE);
+
                 progress.setVisibility(View.GONE);
                 captchaText.setText("");
+                captchaText.setOnEditorActionListener(enterButtonListener);
 
                 submit.setOnClickListener(submitButtonListener);
             }
@@ -209,17 +213,18 @@ public class Captcha extends ActionBarActivity {
     View.OnClickListener submitButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            try {
-                BaseAsyncTask mAsyncTask = new BaseAsyncTask();
-                mAsyncTask.setUrl(AERO_SERVER);
-                mAsyncTask.addParam("viewForm", "true");
-                mAsyncTask.addParam("recaptcha_challenge_field", json.getString("challenge"));
-                mAsyncTask.addParam("recaptcha_response_field", captchaText.getText().toString());
-                mAsyncTask.setCallbackListener(submitListener);
-                mAsyncTask.setParser(new StringParser());
-                mAsyncTask.execute();
-            } catch (JSONException e) {
+            Aero.sendCaptcha(json, captchaText.getText().toString(), submitListener);
+        }
+    };
+
+    TextView.OnEditorActionListener enterButtonListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                Aero.sendCaptcha(json, captchaText.getText().toString(), submitListener);
+                return true;
             }
+            return false;
         }
     };
 }
