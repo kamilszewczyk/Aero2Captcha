@@ -36,6 +36,14 @@ import ks.aero2captcha.alarm.CaptchaService;
  */
 public class SettingsActivity extends PreferenceActivity
     implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        if(SettingsActivity.class.getName().equals(fragmentName))
+            return true;
+        return false;
+    }
+
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
