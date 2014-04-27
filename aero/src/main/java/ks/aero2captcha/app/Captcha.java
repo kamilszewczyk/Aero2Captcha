@@ -183,6 +183,7 @@ public class Captcha extends ActionBarActivity {
         @Override
         public void onComplete(TaskResult rs) {
             if(rs.code == TaskResult.CODE_ERROR) {
+                Log.e(TAG, rs.message);
                 Toast.makeText(getApplicationContext(), R.string.error_submit, Toast.LENGTH_LONG).show();
                 downloadCaptcha();
             }

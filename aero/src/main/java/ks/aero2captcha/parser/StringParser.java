@@ -23,11 +23,11 @@ public class StringParser implements BaseParser {
     @Override
     public TaskResult parse(InputStream in) {
         TaskResult result = new TaskResult();
-        String message = "";
+        result.code = TaskResult.CODE_ERROR;
+        result.message = "";
         try {
             String str = parseInputStream(in);
-            Log.e("captcha_log", str);
-            Pattern jsonPattern = Pattern.compile("(\\{.*\\})");
+            Pattern jsonPattern = Pattern.compile("var RecaptchaState = (\\{.*\\})");
             Matcher jsonMatcher = jsonPattern.matcher(str);
             if (jsonMatcher.find()) {
                 JSONObject json = new JSONObject(jsonMatcher.group(1));
@@ -36,14 +36,12 @@ public class StringParser implements BaseParser {
             }
             if (str.indexOf("Niepoprawna odpowiedź.") != -1) {
                 result.message = "error_answer";
-                result.code = TaskResult.CODE_ERROR;
             }
             if (str.indexOf("Odpowiedź prawidłowa. Zrestartuj połączenie internetowe") != -1) {
                 result.code = TaskResult.CODE_SUCCESS;
             }
         } catch (Exception e) {
             result.message = e.getMessage();
-            result.code = TaskResult.CODE_ERROR;
         }
 
         return result;
@@ -60,6 +58,7 @@ public class StringParser implements BaseParser {
                 total.append(line);
             }
             str = total.toString();
+            Log.e("captcha_log", str);
         } finally {
             if (stream != null) {
                 stream.close();
