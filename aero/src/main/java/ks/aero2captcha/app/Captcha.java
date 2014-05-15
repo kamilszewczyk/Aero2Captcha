@@ -35,7 +35,7 @@ public class Captcha extends ActionBarActivity {
     public final static String TAG                 = "Aero2Captcha";
     public final static String AERO_SERVER         = "http://bdi.free.aero2.net.pl:8080/";
     TextView captchaText;
-    Button submit;
+    Button submit; Button refresh;
     ProgressBar progress;
     SharedPreferences sharedPref;
 
@@ -46,10 +46,15 @@ public class Captcha extends ActionBarActivity {
 
         captchaText = (TextView) findViewById(R.id.captchaText);
         submit = (Button) findViewById(R.id.captchaButton);
+        refresh = (Button) findViewById(R.id.refreshButton);
         progress = (ProgressBar) findViewById(R.id.captchaProgress);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
+        //try to download captcha on first run
         downloadCaptcha();
+
+        //attach button listener
+        refresh.setOnClickListener(refreshButtonListener);
 
         //start service only if user wants to be notified
         Boolean notify = sharedPref.getBoolean("notifications_new_message", true);
@@ -66,6 +71,7 @@ public class Captcha extends ActionBarActivity {
         }
 
         submit.setVisibility(View.GONE);
+        refresh.setVisibility(View.GONE);
         progress.setVisibility(View.VISIBLE);
 
         //show active connection text instead of captcha when no captcha is needed
@@ -79,8 +85,10 @@ public class Captcha extends ActionBarActivity {
                 text.setVisibility(View.VISIBLE);
 
                 submit.setEnabled(false);
+                refresh.setEnabled(false);
                 progress.setVisibility(View.GONE);
                 submit.setVisibility(View.VISIBLE);
+                refresh.setVisibility(View.VISIBLE);
                 return;
             }
         } catch (InterruptedException e) {
@@ -131,6 +139,7 @@ public class Captcha extends ActionBarActivity {
                 Log.e(TAG, rs.message);
                 Toast.makeText(getApplicationContext(), R.string.error_download, Toast.LENGTH_LONG).show();
                 submit.setEnabled(false);
+                refresh.setEnabled(false);
             }
             else if(rs.code == TaskResult.CODE_SUCCESS) {
                 TouchImageView image = (TouchImageView) findViewById(R.id.captchaImage);
@@ -141,7 +150,9 @@ public class Captcha extends ActionBarActivity {
                 text.setVisibility(View.GONE);
 
                 submit.setEnabled(true);
+                refresh.setEnabled(true);
                 submit.setVisibility(View.VISIBLE);
+                refresh.setVisibility(View.VISIBLE);
 
                 progress.setVisibility(View.GONE);
                 captchaText.setText("");
@@ -177,6 +188,13 @@ public class Captcha extends ActionBarActivity {
                     }
                 }, restartDelay);
             }
+        }
+    };
+
+    View.OnClickListener refreshButtonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            downloadCaptcha();
         }
     };
 
