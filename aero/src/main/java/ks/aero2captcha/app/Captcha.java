@@ -19,9 +19,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.concurrent.ExecutionException;
 
 import ks.aero2captcha.alarm.CaptchaService;
@@ -32,15 +29,11 @@ import ks.aero2captcha.network.ConnectionManager;
 import ks.aero2captcha.network.State;
 import ks.aero2captcha.network.TaskResult;
 import ks.aero2captcha.parser.ImageParser;
-import ks.aero2captcha.parser.StringParser;
 
 public class Captcha extends ActionBarActivity {
 
     public final static String TAG                 = "Aero2Captcha";
-    public final static String AERO_PUBLIC_KEY     = "6LfXGdQSAAAAADi5NxUNOWP5sYiW8rDzk-0DRUz1";
-    public final static String RECAPTCHA_SERVER    = "http://www.google.com/recaptcha/api/";
     public final static String AERO_SERVER         = "http://bdi.free.aero2.net.pl:8080/";
-    JSONObject json;
     TextView captchaText;
     Button submit;
     ProgressBar progress;
@@ -96,11 +89,12 @@ public class Captcha extends ActionBarActivity {
             e.printStackTrace();
         }
 
-        BaseAsyncTask mAsyncTask = new BaseAsyncTask();
-        mAsyncTask.setUrl(RECAPTCHA_SERVER + "challenge?k=" + AERO_PUBLIC_KEY);
-        mAsyncTask.setCallbackListener(callbackListener);
-        mAsyncTask.setParser(new StringParser());
-        mAsyncTask.execute();
+        BaseAsyncTask imageAsyncTask = new BaseAsyncTask();
+        imageAsyncTask.setUrl(AERO_SERVER + "getCaptcha.html");
+        imageAsyncTask.setRequestType(ConnectionManager.GET_REQUEST);
+        imageAsyncTask.setCallbackListener(imageListener);
+        imageAsyncTask.setParser(new ImageParser());
+        imageAsyncTask.execute();
     }
 
     @Override
@@ -128,30 +122,6 @@ public class Captcha extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    public BaseAsyncTask.OnTaskCompleteListener callbackListener = new BaseAsyncTask.OnTaskCompleteListener() {
-        @Override
-        public void onComplete(TaskResult rs) {
-            if(rs.code == TaskResult.CODE_ERROR) {
-                Log.e(TAG, rs.message);
-                Toast.makeText(getApplicationContext(), R.string.error_download, Toast.LENGTH_LONG).show();
-                submit.setEnabled(false);
-            }
-            else if(rs.code == TaskResult.CODE_SUCCESS) {
-                json = (JSONObject) rs.getResultData();
-
-                try {
-                    BaseAsyncTask imageAsyncTask = new BaseAsyncTask();
-                    imageAsyncTask.setUrl(RECAPTCHA_SERVER + "image?c=" + json.getString("challenge"));
-                    imageAsyncTask.setRequestType(ConnectionManager.GET_REQUEST);
-                    imageAsyncTask.setCallbackListener(imageListener);
-                    imageAsyncTask.setParser(new ImageParser());
-                    imageAsyncTask.execute();
-                } catch (JSONException e) {
-                }
-            }
-        }
-    };
 
     public BaseAsyncTask.OnTaskCompleteListener imageListener = new BaseAsyncTask.OnTaskCompleteListener() {
 
@@ -213,7 +183,7 @@ public class Captcha extends ActionBarActivity {
     View.OnClickListener submitButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Aero.sendCaptcha(json, captchaText.getText().toString(), submitListener);
+            Aero.sendCaptcha(captchaText.getText().toString(), submitListener);
         }
     };
 
@@ -221,7 +191,7 @@ public class Captcha extends ActionBarActivity {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                Aero.sendCaptcha(json, captchaText.getText().toString(), submitListener);
+                Aero.sendCaptcha(captchaText.getText().toString(), submitListener);
                 return true;
             }
             return false;

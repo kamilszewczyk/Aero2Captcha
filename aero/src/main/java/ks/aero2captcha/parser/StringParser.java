@@ -37,7 +37,7 @@ public class StringParser implements BaseParser {
             if (str.indexOf("Niepoprawna odpowiedź.") != -1) {
                 result.message = "error_answer";
             }
-            if (str.indexOf("Odpowiedź prawidłowa. Zrestartuj połączenie internetowe") != -1) {
+            if (str.indexOf("Odpowiedź prawidłowa.") != -1) {
                 result.code = TaskResult.CODE_SUCCESS;
             }
         } catch (Exception e) {
