@@ -102,6 +102,7 @@ public class Captcha extends ActionBarActivity {
         imageAsyncTask.setRequestType(ConnectionManager.GET_REQUEST);
         imageAsyncTask.setCallbackListener(imageListener);
         imageAsyncTask.setParser(new ImageParser());
+        imageAsyncTask.setContext(getApplicationContext());
         imageAsyncTask.execute();
     }
 
@@ -201,7 +202,7 @@ public class Captcha extends ActionBarActivity {
     View.OnClickListener submitButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Aero.sendCaptcha(captchaText.getText().toString(), submitListener);
+            Aero.sendCaptcha(getApplicationContext(), captchaText.getText().toString(), submitListener);
         }
     };
 
@@ -209,7 +210,7 @@ public class Captcha extends ActionBarActivity {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                Aero.sendCaptcha(captchaText.getText().toString(), submitListener);
+                Aero.sendCaptcha(getApplicationContext(), captchaText.getText().toString(), submitListener);
                 return true;
             }
             return false;

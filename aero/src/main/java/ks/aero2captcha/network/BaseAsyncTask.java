@@ -1,5 +1,6 @@
 package ks.aero2captcha.network;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import java.io.IOException;
@@ -69,6 +70,8 @@ public class BaseAsyncTask extends AsyncTask<Void, Integer, TaskResult> {
     public void setParser(BaseParser parser) {
         this.mParser = parser;
     }
+
+    public void setContext(Context c) { mConnectionManager.setContext(c); }
 
     public interface OnTaskCompleteListener {
         public void onComplete(TaskResult rs);

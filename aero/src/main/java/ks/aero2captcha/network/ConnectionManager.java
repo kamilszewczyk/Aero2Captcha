@@ -1,11 +1,13 @@
 package ks.aero2captcha.network;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -41,6 +43,8 @@ public class ConnectionManager {
     private int mRequestType = POST_REQUEST;
     private int mConnectionTimeout = CONNECTION_TIMEOUT;
     private int mSocketTimeout = SOCKET_TIMEOUT;
+    private Context context;
+    private SharedPreferences prefs;
 
     public ConnectionManager() {
         params = new ArrayList<NameValuePair>();
@@ -60,6 +64,9 @@ public class ConnectionManager {
     public void setSocketTimeout(int timeout) {
         mSocketTimeout = timeout;
     }
+    public void setContext(Context c) {
+        context = c;
+    }
 
 
     public void setUrl(String url) {
@@ -70,7 +77,7 @@ public class ConnectionManager {
     }
 
     public HttpResponse getHttpResponse() throws IOException {
-        if(url == null) {
+        if (url == null) {
             throw new NullPointerException();
         }
         System.setProperty("http.keepAlive", "false");
@@ -78,6 +85,11 @@ public class ConnectionManager {
         HttpParams httpParameters = new BasicHttpParams();
         HttpConnectionParams.setConnectionTimeout(httpParameters, mConnectionTimeout);
         HttpConnectionParams.setSoTimeout(httpParameters, mSocketTimeout);
+
+        if (context != null) {
+            prefs = context.getSharedPreferences(
+                    "ks.aero2captcha.app", Context.MODE_PRIVATE);
+        }
 
         DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
 
@@ -90,6 +102,12 @@ public class ConnectionManager {
             }
 
             DefaultHttpClient mClient = new DefaultHttpClient(httpParameters);
+            if (prefs != null) {
+                String session = prefs.getString("sessionid", null);
+                if (session != null) {
+                    request.addHeader("Cookie", "PHPSESSID=" + session);
+                }
+            }
             httpResponse = mClient.execute(request);
             return httpResponse;
         }
@@ -107,12 +125,19 @@ public class ConnectionManager {
             HttpGet httpGet = new HttpGet(url + queryString);
 
             httpResponse = mClient.execute(httpGet);
+
+            if (httpResponse.getFirstHeader("Set-Cookie") != null && prefs != null) {
+                String session = httpResponse.getFirstHeader("Set-Cookie").getValue();
+                session = session.substring(session.indexOf("=") + 1, session.indexOf(";"));
+                prefs.edit().putString("sessionid", session).commit();
+            }
+            
             return httpResponse;
         }
         return null;
     }
 
-    public InputStream getHttpInputStream() throws ClientProtocolException, Exception {
+    public InputStream getHttpInputStream() throws Exception {
         if (httpResponse == null) {
             httpResponse = getHttpResponse();
         }

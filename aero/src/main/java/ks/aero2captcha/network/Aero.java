@@ -75,13 +75,14 @@ public class Aero extends AsyncTask<Context, Void, Boolean> {
         return false;
     }
 
-    public static void sendCaptcha(String captchaText, BaseAsyncTask.OnTaskCompleteListener listener) {
+    public static void sendCaptcha(Context context, String captchaText, BaseAsyncTask.OnTaskCompleteListener listener) {
         BaseAsyncTask mAsyncTask = new BaseAsyncTask();
         mAsyncTask.setUrl(Captcha.AERO_SERVER);
         mAsyncTask.addParam("viewForm", "true");
         mAsyncTask.addParam("captcha", captchaText);
         mAsyncTask.setCallbackListener(listener);
         mAsyncTask.setParser(new StringParser());
+        mAsyncTask.setContext(context);
         mAsyncTask.execute();
     }
 }
