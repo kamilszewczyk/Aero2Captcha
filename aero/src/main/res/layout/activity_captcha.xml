@@ -32,7 +32,7 @@
             android:id="@+id/captchaText"
             android:layout_gravity="center_horizontal"
             android:imeOptions="actionSend"
-            android:inputType="text"/>
+            android:inputType="textFilter|textNoSuggestions"/>
 
         <LinearLayout
             android:orientation="horizontal"
