@@ -178,16 +178,19 @@ public class Captcha extends ActionBarActivity {
                 NotificationManager notificationManager =
                         (NotificationManager) getApplicationContext().getSystemService(getApplicationContext().NOTIFICATION_SERVICE);
                 notificationManager.cancel(Aero.NOTIFICATION_ID);
-                //show toast
-                Toast.makeText(getApplicationContext(), R.string.success, Toast.LENGTH_LONG).show();
-                //restart connection
-                State.turnOnDataConnection(false, getApplicationContext());
+
                 int restartDelay = Integer.parseInt(sharedPref.getString("restart_delay", "2"));
-                new Handler().postDelayed(new Runnable() {
-                    public void run() {
-                        State.turnOnDataConnection(true, getApplicationContext());
-                    }
-                }, restartDelay);
+                //show toast
+                Toast.makeText(getApplicationContext(), restartDelay == -1 ? R.string.success_manual : R.string.success, Toast.LENGTH_LONG).show();
+                //restart connection
+                if (restartDelay != -1) {
+                    State.turnOnDataConnection(false, getApplicationContext());
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            State.turnOnDataConnection(true, getApplicationContext());
+                        }
+                    }, restartDelay);
+                }
             }
         }
     };

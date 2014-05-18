@@ -14,4 +14,5 @@
 
     <string name="connection_active">Connection is currently active.</string>
     <string name="success">Captcha accepted. Please wait for connection restart.</string>
+    <string name="success_manual">Captcha accepted. Please restart your internet connection.</string>
 </resources>

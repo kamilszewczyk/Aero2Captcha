@@ -9,6 +9,7 @@
     <string name="pref_title_restart_delay">Opóźnienie restartu połączenia 3G</string>
     <string name="pref_summary_restart_delay">Jeżeli restartowanie połączenia nie działą spróbuj ustawić dłuższy czas</string>
     <string-array name="pref_restart_delay_titles">
+        <item>Wyłączone</item>
         <item>2 sekundy</item>
         <item>3 sekundy</item>
         <item>4 sekundy</item>

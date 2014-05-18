@@ -9,6 +9,7 @@
     <string name="pref_title_restart_delay">Restart 3G network delay</string>
     <string name="pref_summary_restart_delay">If restarting 3G netowrk is not working, try setting bigger value</string>
     <string-array name="pref_restart_delay_titles">
+        <item>Disabled</item>
         <item>2 seconds</item>
         <item>3 seconds</item>
         <item>4 seconds</item>
@@ -16,6 +17,7 @@
         <item>10 seconds</item>
     </string-array>
     <string-array name="pref_restart_delay_values">
+        <item>-1</item>
         <item>2</item>
         <item>3</item>
         <item>4</item>
