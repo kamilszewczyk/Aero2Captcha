@@ -191,6 +191,9 @@ public class Captcha extends ActionBarActivity {
                         }
                     }, restartDelay);
                 }
+
+                //close activity
+                finish();
             }
         }
     };
