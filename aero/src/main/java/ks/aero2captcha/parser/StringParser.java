@@ -27,11 +27,11 @@ public class StringParser implements BaseParser {
         result.message = "";
         try {
             String str = parseInputStream(in);
-            Pattern jsonPattern = Pattern.compile("var RecaptchaState = (\\{.*\\})");
-            Matcher jsonMatcher = jsonPattern.matcher(str);
-            if (jsonMatcher.find()) {
-                JSONObject json = new JSONObject(jsonMatcher.group(1));
-                result.setResultData(json);
+            Pattern phpssidPattern = Pattern.compile("PHPSESSID=(.*?)\'");
+            Matcher phpssidMatcher = phpssidPattern.matcher(str);
+            if (phpssidMatcher.find()) {
+                String sessionId = phpssidMatcher.group(1);
+                result.setResultData(sessionId);
                 result.code = TaskResult.CODE_SUCCESS;
             }
             if (str.indexOf("Niepoprawna odpowiedź.") != -1) {

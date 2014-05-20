@@ -29,6 +29,7 @@ import ks.aero2captcha.network.ConnectionManager;
 import ks.aero2captcha.network.State;
 import ks.aero2captcha.network.TaskResult;
 import ks.aero2captcha.parser.ImageParser;
+import ks.aero2captcha.parser.StringParser;
 
 public class Captcha extends ActionBarActivity {
 
@@ -97,13 +98,12 @@ public class Captcha extends ActionBarActivity {
             e.printStackTrace();
         }
 
-        BaseAsyncTask imageAsyncTask = new BaseAsyncTask();
-        imageAsyncTask.setUrl(AERO_SERVER + "getCaptcha.html");
-        imageAsyncTask.setRequestType(ConnectionManager.GET_REQUEST);
-        imageAsyncTask.setCallbackListener(imageListener);
-        imageAsyncTask.setParser(new ImageParser());
-        imageAsyncTask.setContext(getApplicationContext());
-        imageAsyncTask.execute();
+        BaseAsyncTask mAsyncTask = new BaseAsyncTask();
+        mAsyncTask.setUrl(AERO_SERVER);
+        mAsyncTask.setCallbackListener(callbackListener);
+        mAsyncTask.setParser(new StringParser());
+        mAsyncTask.addParam("viewForm", "true");
+        mAsyncTask.execute();
     }
 
     @Override
@@ -131,6 +131,28 @@ public class Captcha extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public BaseAsyncTask.OnTaskCompleteListener callbackListener = new BaseAsyncTask.OnTaskCompleteListener() {
+        @Override
+        public void onComplete(TaskResult rs) {
+            if(rs.code == TaskResult.CODE_ERROR) {
+                Log.e(TAG, rs.message);
+                Toast.makeText(getApplicationContext(), R.string.error_download, Toast.LENGTH_LONG).show();
+                submit.setEnabled(false);
+            }
+            else if(rs.code == TaskResult.CODE_SUCCESS) {
+                String sessionId = (String) rs.getResultData();
+
+                BaseAsyncTask imageAsyncTask = new BaseAsyncTask();
+                imageAsyncTask.setUrl(AERO_SERVER + "getCaptcha.html?PHPSESSID" + sessionId);
+                imageAsyncTask.setRequestType(ConnectionManager.GET_REQUEST);
+                imageAsyncTask.setCallbackListener(imageListener);
+                imageAsyncTask.setParser(new ImageParser());
+                imageAsyncTask.addParam("session_id", sessionId);
+                imageAsyncTask.execute();
+            }
+        }
+    };
 
     public BaseAsyncTask.OnTaskCompleteListener imageListener = new BaseAsyncTask.OnTaskCompleteListener() {
 

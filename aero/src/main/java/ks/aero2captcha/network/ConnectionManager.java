@@ -86,12 +86,9 @@ public class ConnectionManager {
         HttpConnectionParams.setConnectionTimeout(httpParameters, mConnectionTimeout);
         HttpConnectionParams.setSoTimeout(httpParameters, mSocketTimeout);
 
-        if (context != null) {
-            prefs = context.getSharedPreferences(
-                    "ks.aero2captcha.app", Context.MODE_PRIVATE);
-        }
-
         DefaultHttpClient httpClient = new DefaultHttpClient(httpParameters);
+
+
 
         if(mRequestType == POST_REQUEST) {
             HttpPost request = new HttpPost(url);
@@ -99,15 +96,15 @@ public class ConnectionManager {
             if(!params.isEmpty()){
                 HttpEntity httpEntity = new UrlEncodedFormEntity(params, HTTP.UTF_8);
                 request.setEntity(httpEntity);
+
+                for(NameValuePair pair : params) {
+                    if (pair.getName().equals("session_id")) {
+                        request.addHeader("Cookie", "PHPSESSID=" + pair.getValue());
+                    }
+                }
             }
 
             DefaultHttpClient mClient = new DefaultHttpClient(httpParameters);
-            if (prefs != null) {
-                String session = prefs.getString("sessionid", null);
-                if (session != null) {
-                    request.addHeader("Cookie", "PHPSESSID=" + session);
-                }
-            }
             httpResponse = mClient.execute(request);
             return httpResponse;
         }
@@ -125,12 +122,6 @@ public class ConnectionManager {
             HttpGet httpGet = new HttpGet(url + queryString);
 
             httpResponse = mClient.execute(httpGet);
-
-            if (httpResponse.getFirstHeader("Set-Cookie") != null && prefs != null) {
-                String session = httpResponse.getFirstHeader("Set-Cookie").getValue();
-                session = session.substring(session.indexOf("=") + 1, session.indexOf(";"));
-                prefs.edit().putString("sessionid", session).commit();
-            }
             
             return httpResponse;
         }
