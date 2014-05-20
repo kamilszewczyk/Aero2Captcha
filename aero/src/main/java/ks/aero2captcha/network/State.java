@@ -13,18 +13,20 @@ import java.lang.reflect.Method;
  * Created by Kamil on 01.04.14.
  */
 public class State {
-    public static boolean turnOnDataConnection(boolean ON, Context context) {
+    public static boolean turnOnDataConnection(boolean flag, Context context) {
         try {
-            //log.i("App running on Ginger bread+");
-            final ConnectivityManager conman = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            final Class<?> conmanClass = Class.forName(conman.getClass().getName());
-            final Field iConnectivityManagerField = conmanClass.getDeclaredField("mService");
-            iConnectivityManagerField.setAccessible(true);
-            final Object iConnectivityManager = iConnectivityManagerField.get(conman);
-            final Class<?> iConnectivityManagerClass =  Class.forName(iConnectivityManager.getClass().getName());
-            final Method setMobileDataEnabledMethod = iConnectivityManagerClass.getDeclaredMethod("setMobileDataEnabled", Boolean.TYPE);
-            setMobileDataEnabledMethod.setAccessible(true);
-            setMobileDataEnabledMethod.invoke(iConnectivityManager, ON);
+            ConnectivityManager connectivitymanager = (ConnectivityManager)context.getSystemService("connectivity");
+            Field field = Class.forName(connectivitymanager.getClass().getName()).getDeclaredField("mService");
+            field.setAccessible(true);
+            Object obj = field.get(connectivitymanager);
+            Class class1 = Class.forName(obj.getClass().getName());
+            Class aclass[] = new Class[1];
+            aclass[0] = Boolean.TYPE;
+            Method method = class1.getDeclaredMethod("setMobileDataEnabled", aclass);
+            method.setAccessible(true);
+            Object aobj[] = new Object[1];
+            aobj[0] = Boolean.valueOf(flag);
+            method.invoke(obj, aobj);
             return true;
         }catch(Exception e){
             return false;
