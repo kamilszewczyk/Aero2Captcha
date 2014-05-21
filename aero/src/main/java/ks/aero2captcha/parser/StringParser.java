@@ -29,15 +29,13 @@ public class StringParser implements BaseParser {
             String str = parseInputStream(in);
             Pattern phpssidPattern = Pattern.compile("PHPSESSID=(.*?)\'");
             Matcher phpssidMatcher = phpssidPattern.matcher(str);
-            if (phpssidMatcher.find()) {
-                String sessionId = phpssidMatcher.group(1);
-                result.setResultData(sessionId);
-                result.code = TaskResult.CODE_SUCCESS;
-            }
             if (str.indexOf("Niepoprawna odpowiedź.") != -1) {
                 result.message = "error_answer";
-            }
-            if (str.indexOf("Odpowiedź prawidłowa.") != -1) {
+            } else if (str.indexOf("Odpowiedź prawidłowa.") != -1) {
+                result.code = TaskResult.CODE_SUCCESS;
+            } else if (phpssidMatcher.find()) {
+                String sessionId = phpssidMatcher.group(1);
+                result.setResultData(sessionId);
                 result.code = TaskResult.CODE_SUCCESS;
             }
         } catch (Exception e) {

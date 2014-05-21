@@ -98,9 +98,7 @@ public class ConnectionManager {
                 request.setEntity(httpEntity);
 
                 for(NameValuePair pair : params) {
-                    if (pair.getName().equals("session_id")) {
-                        request.addHeader("Cookie", "PHPSESSID=" + pair.getValue());
-                    }
+                    Log.d("params", pair.getName() + " = " + pair.getValue());
                 }
             }
 
@@ -109,7 +107,7 @@ public class ConnectionManager {
             return httpResponse;
         }
         else if(mRequestType == GET_REQUEST) {
-            String queryString = "";
+            String queryString = "?";
             for(int i = 0; i < params.size(); i++) {
                 if(i == 0) {
                     queryString = queryString + params.get(i).getName( ) + "=" + params.get(i).getValue();
@@ -120,6 +118,7 @@ public class ConnectionManager {
             }
             DefaultHttpClient mClient = new DefaultHttpClient(httpParameters);
             HttpGet httpGet = new HttpGet(url + queryString);
+            Log.d("params", "url = " + url + queryString);
 
             httpResponse = mClient.execute(httpGet);
             

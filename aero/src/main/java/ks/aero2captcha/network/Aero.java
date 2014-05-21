@@ -12,6 +12,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 
@@ -62,22 +63,24 @@ public class Aero extends AsyncTask<Context, Void, Boolean> {
         manager.setConnectionTimeout(5000);
         manager.setSocketTimeout(5000);
         manager.setRequestType(ConnectionManager.GET_REQUEST);
-        manager.setUrl(Captcha.AERO_SERVER);
+        manager.setUrl("http://google.com/blank.html");
+
 
         try {
-            HttpResponse response = manager.getHttpResponse();
-
-            return true;
+            if (EntityUtils.toString(manager.getHttpResponse().getEntity()).contains("Aero2")) {
+                return true;
+            }
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
 
         return false;
     }
 
-    public static void sendCaptcha(Context context, String captchaText, BaseAsyncTask.OnTaskCompleteListener listener) {
+    public static void sendCaptcha(Context context, String captchaText, BaseAsyncTask.OnTaskCompleteListener listener, String sessionId) {
         BaseAsyncTask mAsyncTask = new BaseAsyncTask();
         mAsyncTask.setUrl(Captcha.AERO_SERVER);
+        mAsyncTask.addParam("PHPSESSID", sessionId);
         mAsyncTask.addParam("viewForm", "true");
         mAsyncTask.addParam("captcha", captchaText);
         mAsyncTask.setCallbackListener(listener);

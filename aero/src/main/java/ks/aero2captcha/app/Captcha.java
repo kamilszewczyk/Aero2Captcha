@@ -39,6 +39,7 @@ public class Captcha extends ActionBarActivity {
     Button submit; Button refresh;
     ProgressBar progress;
     SharedPreferences sharedPref;
+    String sessionId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,14 +142,14 @@ public class Captcha extends ActionBarActivity {
                 submit.setEnabled(false);
             }
             else if(rs.code == TaskResult.CODE_SUCCESS) {
-                String sessionId = (String) rs.getResultData();
+                sessionId = (String) rs.getResultData();
 
                 BaseAsyncTask imageAsyncTask = new BaseAsyncTask();
-                imageAsyncTask.setUrl(AERO_SERVER + "getCaptcha.html?PHPSESSID" + sessionId);
+                imageAsyncTask.setUrl(AERO_SERVER + "getCaptcha.html");
                 imageAsyncTask.setRequestType(ConnectionManager.GET_REQUEST);
                 imageAsyncTask.setCallbackListener(imageListener);
                 imageAsyncTask.setParser(new ImageParser());
-                imageAsyncTask.addParam("session_id", sessionId);
+                imageAsyncTask.addParam("PHPSESSID", sessionId);
                 imageAsyncTask.execute();
             }
         }
@@ -230,7 +231,7 @@ public class Captcha extends ActionBarActivity {
     View.OnClickListener submitButtonListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Aero.sendCaptcha(getApplicationContext(), captchaText.getText().toString(), submitListener);
+            Aero.sendCaptcha(getApplicationContext(), captchaText.getText().toString(), submitListener, sessionId);
         }
     };
 
@@ -238,7 +239,7 @@ public class Captcha extends ActionBarActivity {
         @Override
         public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
             if (actionId == EditorInfo.IME_ACTION_SEND) {
-                Aero.sendCaptcha(getApplicationContext(), captchaText.getText().toString(), submitListener);
+                Aero.sendCaptcha(getApplicationContext(), captchaText.getText().toString(), submitListener, sessionId);
                 return true;
             }
             return false;
